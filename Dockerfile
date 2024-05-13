@@ -7,11 +7,12 @@ ENV GO111MODULE=on \
 
 WORKDIR /app
 
-COPY go.mod .
+RUN go mod init main
+RUN go mod tidy
 RUN go mod download
 
 COPY *.go .
-
+RUN  go get github.com/sirupsen/logrus
 RUN go build -o /app/webServerApp
 
 EXPOSE 8000
