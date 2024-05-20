@@ -49,6 +49,6 @@ func IndexPageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func SetDB(dbConn *sql.DB) {
+func PathDbToHandlers(dbConn *sql.DB) {
 	db = dbConn
 }
