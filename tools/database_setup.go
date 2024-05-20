@@ -6,20 +6,17 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "postgres"
-	dbname   = "postgres"
-)
-
 func GetDbConnection() *sql.DB {
-	psqlConn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	psqlConn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		GetEnv("DB_HOST", "localhost"),
+		GetEnvAsInt("POSTGRES_PORT", 5432),
+		GetEnv("POSTGRES_USER", "postgres"),
+		GetEnv("POSTGRES_PASSWORD", "postgres"),
+		GetEnv("POSTGRES_NAME", "postgres"))
 	var dbErr error
 	db, dbErr := sql.Open("postgres", psqlConn)
 	if dbErr != nil {
-		log.Fatal(dbErr)
+		log.Fatalf("Error connecting to database: %s", dbErr)
 	}
 	return db
 }

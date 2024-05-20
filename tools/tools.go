@@ -2,8 +2,8 @@ package tools
 
 import (
 	log "github.com/sirupsen/logrus"
-	"io"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -28,17 +28,28 @@ func ConvertTimeToTimestamp(date string) time.Time {
 	return time.Now()
 }
 
-func getEnv() string {
-	logLevel := os.Getenv("LOG_LEVEL")
-	if len(logLevel) == 0 {
-		return "debug"
+func GetEnv(requestedEnvVar string, defaultVar string) string {
+	envVariable := os.Getenv(requestedEnvVar)
+	if len(envVariable) == 0 {
+		log.Errorf("Environment string variable %s is empty %s", requestedEnvVar, envVariable)
+		return defaultVar
 	}
-	return logLevel
+	return envVariable
+}
+
+func GetEnvAsInt(requestedEnvVar string, defaultVar int64) int64 {
+	envVariable := os.Getenv(requestedEnvVar)
+	if len(envVariable) == 0 {
+		log.Errorf("Environment int64 variable %s is empty %s", requestedEnvVar, envVariable)
+		return defaultVar
+	}
+	envVarAsInt, _ := strconv.ParseInt(envVariable, 10, 64)
+	return envVarAsInt
 }
 
 func SetupLogging() {
 
-	logLevel := getEnv()
+	logLevel := GetEnv("LOG_LEVEL", "debug")
 	switch logLevel {
 	case "debug":
 		log.SetLevel(log.DebugLevel)
@@ -51,9 +62,6 @@ func SetupLogging() {
 		log.SetLevel(log.ErrorLevel)
 	case "trace":
 		log.SetLevel(log.TraceLevel)
-		file, _ := os.OpenFile("/var/log/trace.log", os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
-		mw := io.MultiWriter(file, os.Stdout)
-		log.SetOutput(mw)
 	default:
 		log.SetLevel(log.InfoLevel)
 	}
