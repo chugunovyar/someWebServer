@@ -11,8 +11,9 @@ RUN go mod init main
 RUN go mod tidy
 RUN go mod download
 
-COPY *.go .
+COPY . .
 RUN  go get github.com/sirupsen/logrus
+RUN go get github.com/lib/pq
 RUN go build -o /app/webServerApp
 
 EXPOSE 8000

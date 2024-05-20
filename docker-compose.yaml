@@ -18,5 +18,8 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+      - DB_HOST=db
+      - LOG_LEVEL=debug
     depends_on:
       - db
