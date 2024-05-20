@@ -2,13 +2,13 @@ services:
   db:
     image: postgres
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - pd_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 5432:5432
+      - 5433:5432
   app:
     build:
       context: .
@@ -23,3 +23,6 @@ services:
       - LOG_LEVEL=debug
     depends_on:
       - db
+
+volumes:
+  pd_data:
