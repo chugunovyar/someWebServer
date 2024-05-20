@@ -23,5 +23,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handlers.IndexPageHandler)
+	mux.HandleFunc("/get_sum", handlers.GetSumOfArticlesHandler)
 	log.Fatal(http.ListenAndServe("0.0.0.0:8000", mux))
 }

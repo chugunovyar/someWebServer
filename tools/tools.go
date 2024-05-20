@@ -31,7 +31,7 @@ func ConvertTimeToTimestamp(date string) time.Time {
 func GetEnv(requestedEnvVar string, defaultVar string) string {
 	envVariable := os.Getenv(requestedEnvVar)
 	if len(envVariable) == 0 {
-		log.Errorf("Environment string variable %s is empty %s", requestedEnvVar, envVariable)
+		log.Errorf("Environment string variable %s is empty %s Therefore we use the default value - %s", requestedEnvVar, envVariable, defaultVar)
 		return defaultVar
 	}
 	return envVariable
