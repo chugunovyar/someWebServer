@@ -14,7 +14,7 @@ const (
 	dbname   = "postgres"
 )
 
-func DbConn() *sql.DB {
+func GetDbConnection() *sql.DB {
 	psqlConn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	var dbErr error
 	db, dbErr := sql.Open("postgres", psqlConn)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"main/handlers"
@@ -11,9 +12,14 @@ import (
 func main() {
 	tools.SetupLogging()
 
-	db := tools.DbConn()
-	handlers.SetDB(db)
-	defer db.Close()
+	db := tools.GetDbConnection()
+	handlers.PathDbToHandlers(db)
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Errorf("Error closing db connection: %v", err)
+		}
+	}(db)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handlers.IndexPageHandler)
