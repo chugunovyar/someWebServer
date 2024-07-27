@@ -22,11 +22,11 @@ func (ct *PythonDateTime) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
-func (c PythonDateTime) MarshalJSON() ([]byte, error) {
-	if c.Time.IsZero() {
+func (ct *PythonDateTime) MarshalJSON() ([]byte, error) {
+	if ct.Time.IsZero() {
 		return nil, nil
 	}
-	return []byte(fmt.Sprintf(`"%s"`, c.Time.Format(expiryDateLayout))), nil
+	return []byte(fmt.Sprintf(`"%s"`, ct.Time.Format(expiryDateLayout))), nil
 }
 
 type Article struct {

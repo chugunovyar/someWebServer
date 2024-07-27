@@ -29,3 +29,7 @@ or directly, but you must set env vars.
 go run .
 ```
 
+# Testing
+```shell
+go test -v ./...
+```

@@ -23,6 +23,7 @@ func IndexPageHandler(w http.ResponseWriter, r *http.Request) {
 		var article core.Article
 		err := json.NewDecoder(r.Body).Decode(&article)
 		if err != nil {
+			log.Errorf("Error decoding body: %v article %v", err, r.Body)
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
@@ -31,13 +32,14 @@ func IndexPageHandler(w http.ResponseWriter, r *http.Request) {
 		var id int
 		errSql := db.QueryRow(sqlStmt, article.Headline, article.Content, tools.ConvertTimeToTimestamp(article.PubDate.Format(format))).Scan(&id)
 		if errSql != nil {
+			log.Errorf("Error inserting article %v", errSql)
 			http.Error(w, errSql.Error(), 400)
 			return
 		}
 		log.Debugf("Write article id: %d", id)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		jsonResp, err := json.Marshal(map[string]int{"id": id})
+		jsonResp, err := json.Marshal(map[string]int{"external_id": id})
 		w.Write(jsonResp)
 	}
 }

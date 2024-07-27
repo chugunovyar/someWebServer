@@ -9,11 +9,6 @@ import (
 
 const format = "2006-01-02 15:04:05"
 
-func ConvertTimestampToTime(timestamp int64) time.Time {
-	t := time.Unix(timestamp, 0)
-	return t
-}
-
 func ConvertTimeToTimestamp(date string) time.Time {
 	//Check the documentation on Go for the const variables!
 	//They need to be exactly as they are shown in the documentation to be read correctly!
