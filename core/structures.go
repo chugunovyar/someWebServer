@@ -34,3 +34,8 @@ type Article struct {
 	Headline string         `json:"headline"`
 	Content  string         `json:"content"`
 }
+
+type Page struct {
+	Title string
+	Body  string
+}

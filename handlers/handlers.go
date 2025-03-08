@@ -3,44 +3,32 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
 	"main/core"
-	"main/tools"
 	"net/http"
+	"text/template"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var db *sql.DB
 
 const format = "2006-01-02 15:04:05"
 
-type RespBody struct {
-	id int
+func loadPage() *core.Page {
+	return &core.Page{Title: "Мощный заголовок", Body: "ла-ла-ла"}
 }
 
 func IndexPageHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("templates/index.html")
 	switch r.Method {
+	case "GET":
+		p := loadPage()
+		log.Infof("Get request %v", r.Body)
+		t.Execute(w, p)
 	case "POST":
-		var article core.Article
-		err := json.NewDecoder(r.Body).Decode(&article)
-		if err != nil {
-			log.Errorf("Error decoding body: %v article %v", err, r.Body)
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		sqlStmt := `INSERT INTO ARTICLES(headline, content, pub_date) VALUES($1,$2,$3) RETURNING id`
-		log.Debugln(article)
-		var id int
-		errSql := db.QueryRow(sqlStmt, article.Headline, article.Content, tools.ConvertTimeToTimestamp(article.PubDate.Format(format))).Scan(&id)
-		if errSql != nil {
-			log.Errorf("Error inserting article %v", errSql)
-			http.Error(w, errSql.Error(), 400)
-			return
-		}
-		log.Debugf("Write article id: %d", id)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		jsonResp, err := json.Marshal(map[string]int{"external_id": id})
-		w.Write(jsonResp)
+		p := loadPage()
+		log.Infof("Post request form data %v", r.FormValue("body"))
+		t.Execute(w, p)
 	}
 }
 
