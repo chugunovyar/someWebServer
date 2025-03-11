@@ -35,7 +35,11 @@ type Article struct {
 	Content  string         `json:"content"`
 }
 
-type Page struct {
+type Form struct {
 	Title string
 	Body  string
+}
+
+type CustomHttpReponse struct {
+	Form Form
 }

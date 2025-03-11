@@ -12,23 +12,22 @@ import (
 
 var db *sql.DB
 
-const format = "2006-01-02 15:04:05"
-
-func loadPage() *core.Page {
-	return &core.Page{Title: "Мощный заголовок", Body: "ла-ла-ла"}
-}
-
 func IndexPageHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("templates/index.html")
 	switch r.Method {
 	case "GET":
-		p := loadPage()
 		log.Infof("Get request %v", r.Body)
-		t.Execute(w, p)
+		customRsp := &core.CustomHttpReponse{Form: core.Form{Title: "Title", Body: "Ла ла ла"}}
+		t.Execute(w, customRsp)
 	case "POST":
-		p := loadPage()
-		log.Infof("Post request form data %v", r.FormValue("body"))
-		t.Execute(w, p)
+		err := r.ParseForm()
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Info(r.PostForm)
+		customRsp := &core.CustomHttpReponse{Form: core.Form{Title: r.FormValue("title"), Body: r.FormValue("body")}}
+		log.Infof("Post request form data %v", r.PostForm)
+		t.Execute(w, customRsp)
 	}
 }
 
