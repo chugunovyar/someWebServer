@@ -1,13 +1,19 @@
 package tools
 
 import (
-	log "github.com/sirupsen/logrus"
+	"main/core"
 	"os"
 	"strconv"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const format = "2006-01-02 15:04:05"
+
+func LoadPage() *core.Form {
+	return &core.Form{Title: "Мощный заголовок", Body: "ла-ла-ла"}
+}
 
 func ConvertTimeToTimestamp(date string) time.Time {
 	//Check the documentation on Go for the const variables!
