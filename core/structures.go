@@ -34,3 +34,12 @@ type Article struct {
 	Headline string         `json:"headline"`
 	Content  string         `json:"content"`
 }
+
+type Form struct {
+	Title string
+	Body  string
+}
+
+type CustomHttpReponse struct {
+	Form Form
+}

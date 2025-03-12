@@ -2,11 +2,12 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
-	log "github.com/sirupsen/logrus"
 	"main/handlers"
 	"main/tools"
 	"net/http"
+
+	_ "github.com/lib/pq"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {

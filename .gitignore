@@ -24,3 +24,5 @@ go.work
 
 data
 .github/
+.vscode/
+__debug_*

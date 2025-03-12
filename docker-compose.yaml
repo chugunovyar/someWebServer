@@ -1,6 +1,18 @@
 services:
+  nginx:
+    build:
+      context: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - ./static:/usr/share/nginx/html/static
+    networks:
+      - net
+    depends_on:
+      - db
+      - app
   db:
-    image: postgres
+    image: postgres:16.0
     volumes:
       - pd_data:/var/lib/postgresql/data
     environment:
@@ -8,7 +20,9 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 5433:5432
+      - 5432:5432
+    networks:
+      - net
   app:
     build:
       context: .
@@ -23,6 +37,12 @@ services:
       - LOG_LEVEL=debug
     depends_on:
       - db
+    networks:
+      - net
+
+networks:
+  net:
 
 volumes:
   pd_data:
+  static_files: { }
