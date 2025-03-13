@@ -4,4 +4,5 @@ create table ARTICLES
     headline varchar(256) not null,
     content text not null,
     pub_date TIMESTAMP
-)
+);
+CREATE table accounts (identifier SERIAL, login VARCHAR(10), password VARCHAR(100));

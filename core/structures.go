@@ -43,3 +43,10 @@ type Form struct {
 type CustomHttpReponse struct {
 	Form Form
 }
+
+type application struct {
+	auth struct {
+		username string
+		password string
+	}
+}
