@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	_ "github.com/lib/pq"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -23,6 +24,7 @@ func main() {
 	}(db)
 
 	mux := http.NewServeMux()
+	mux.Handle("/metrics", promhttp.Handler())
 	mux.HandleFunc("/", handlers.IndexPageHandler)
 	mux.HandleFunc("/get_sum", handlers.GetSumOfArticlesHandler)
 	log.Fatal(http.ListenAndServe("0.0.0.0:8000", mux))
