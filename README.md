@@ -33,3 +33,9 @@ go run .
 ```shell
 go test -v ./...
 ```
+
+# Setup DB
+
+```sql
+ \i schema.sql
+```

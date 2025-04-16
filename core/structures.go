@@ -43,3 +43,24 @@ type Form struct {
 type CustomHttpReponse struct {
 	Form Form
 }
+
+type DataSet struct {
+	Label string `json:"label"`
+	Data  []int  `json:"data"`
+}
+
+type GraphicElement struct {
+	Labels   []string  `json:"labels"`
+	Datasets []DataSet `json:"datasets"`
+}
+
+type UserRequests struct {
+	Title    string
+	Message  string
+	Pub_date time.Time
+}
+
+type Row struct {
+	Count int
+	Dt    time.Time
+}
