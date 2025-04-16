@@ -17,7 +17,7 @@ func IndexPageHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		log.Infof("Get request %v", r.Body)
-		customRsp := &core.CustomHttpReponse{Form: core.Form{Title: "Title", Body: "Ла ла ла"}}
+		customRsp := core.Form{Title: "Title", Body: "Message"}
 		t.Execute(w, customRsp)
 	case "POST":
 		err := r.ParseForm()
@@ -25,7 +25,12 @@ func IndexPageHandler(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		log.Info(r.PostForm)
-		customRsp := &core.CustomHttpReponse{Form: core.Form{Title: r.FormValue("title"), Body: r.FormValue("body")}}
+		customRsp := core.Form{Title: r.FormValue("title"), Body: r.FormValue("body")}
+		sqlStmt := `INSERT INTO UserRequests (Title, Message) VALUES ($1, $2)`
+		_, err = db.Exec(sqlStmt, customRsp.Title, customRsp.Body)
+		if err != nil {
+			panic(err)
+		}
 		log.Infof("Post request form data %v", r.PostForm)
 		t.Execute(w, customRsp)
 	}
