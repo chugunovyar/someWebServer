@@ -1,10 +1,11 @@
 package tools
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestConvertTimeToTimestamp(t *testing.T) {

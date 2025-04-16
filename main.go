@@ -25,7 +25,8 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.Handler())
-	mux.HandleFunc("/", handlers.IndexPageHandler)
+	mux.HandleFunc("/api/get_data", handlers.DataRepresent)
 	mux.HandleFunc("/get_sum", handlers.GetSumOfArticlesHandler)
+	mux.HandleFunc("/", handlers.IndexPageHandler)
 	log.Fatal(http.ListenAndServe("0.0.0.0:8000", mux))
 }

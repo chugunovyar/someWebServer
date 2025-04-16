@@ -1,3 +1,49 @@
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+// using jQuery
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+
+function getData(url){
+  console.log("Here need make req to back");
+
+  $.ajaxSetup({
+
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    },
+  });
+  const result = $.ajax({
+      url: url,
+      type: 'get',
+      async: false,
+  });
+  console.log(result.responseJSON);
+  return result.responseJSON;
+}
+
+
 (function ($) {
     'use strict';
     $(function () {
@@ -14,38 +60,28 @@
       
             new Chart(ctx, {
               type: 'line',
-              data: {
-                labels: ["SUN","sun", "MON", "mon", "TUE","tue", "WED", "wed", "THU", "thu", "FRI", "fri", "SAT"],
-                datasets: [{
-                  label: 'This week',
-                  data: [50, 110, 60, 290, 200, 115, 130, 170, 90, 210, 240, 280, 200],
-                  backgroundColor: saleGradientBg,
-                  borderColor: [
-                      '#1F3BB3',
-                  ],
-                  borderWidth: 1.5,
-                  fill: true, // 3: no fill
-                  pointBorderWidth: 1,
-                  pointRadius: [4, 4, 4, 4, 4,4, 4, 4, 4, 4,4, 4, 4],
-                  pointHoverRadius: [2, 2, 2, 2, 2,2, 2, 2, 2, 2,2, 2, 2],
-                  pointBackgroundColor: ['#1F3BB3)', '#1F3BB3', '#1F3BB3', '#1F3BB3','#1F3BB3)', '#1F3BB3', '#1F3BB3', '#1F3BB3','#1F3BB3)', '#1F3BB3', '#1F3BB3', '#1F3BB3','#1F3BB3)'],
-                  pointBorderColor: ['#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff',],
-              },{
-                label: 'Last week',
-                data: [30, 150, 190, 250, 120, 150, 130, 20, 30, 15, 40, 95, 180],
-                backgroundColor: saleGradientBg2,
-                borderColor: [
-                    '#52CDFF',
-                ],
-                borderWidth: 1.5,
-                fill: true, // 3: no fill
-                pointBorderWidth: 1,
-                pointRadius: [0, 0, 0, 4, 0],
-                pointHoverRadius: [0, 0, 0, 2, 0],
-                pointBackgroundColor: ['#52CDFF)', '#52CDFF', '#52CDFF', '#52CDFF','#52CDFF)', '#52CDFF', '#52CDFF', '#52CDFF','#52CDFF)', '#52CDFF', '#52CDFF', '#52CDFF','#52CDFF)'],
-                  pointBorderColor: ['#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff',],
-            }]
-              },
+              data: getData("http://localhost/api/get_data"),
+            //   data: {
+            //     labels: ["SUN","sun", "MON", "mon", "TUE","tue", "WED", "wed", "THU", "thu", "FRI", "fri", "SAT"],
+            //     datasets: [{
+            //       label: 'This week',
+            //       data: [50, 110, 60, 290, 200, 115, 130, 170, 90, 210, 240, 280, 200],
+            //       backgroundColor: saleGradientBg,
+            //       borderColor: [
+            //           '#1F3BB3',
+            //       ],
+            //       borderWidth: 1.5,
+            //       fill: true, // 3: no fill
+            //       pointBorderWidth: 1,
+            //       pointRadius: [4, 4, 4, 4, 4,4, 4, 4, 4, 4,4, 4, 4],
+            //       pointHoverRadius: [2, 2, 2, 2, 2,2, 2, 2, 2, 2,2, 2, 2],
+            //       pointBackgroundColor: ['#1F3BB3)', '#1F3BB3', '#1F3BB3', '#1F3BB3','#1F3BB3)', '#1F3BB3', '#1F3BB3', '#1F3BB3','#1F3BB3)', '#1F3BB3', '#1F3BB3', '#1F3BB3','#1F3BB3)'],
+            //       pointBorderColor: ['#fff','#fresponseJSON
+            //     pointHoverRadius: [0, 0, 0, 2, 0],
+            //     pointBackgroundColor: ['#52CDFF)', '#52CDFF', '#52CDFF', '#52CDFF','#52CDFF)', '#52CDFF', '#52CDFF', '#52CDFF','#52CDFF)', '#52CDFF', '#52CDFF', '#52CDFF','#52CDFF)'],
+            //       pointBorderColor: ['#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff',],
+            // }]
+            //   },
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
